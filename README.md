@@ -62,8 +62,8 @@ Ports
 
 The container exposes SSH port **22**.
 
-Usage
------
+Bootstrap
+---------
 
   - Start the container with an ssh certificate, and the volume assigned to the root CA. To create a ssh certificate, see https://github.com/rjrivero/docker-baseimage-ssh
 
@@ -116,3 +116,28 @@ docker run -d --name sub-ca -p 2222:22 \
   - Copy the certificate and certificate chains back to the subordinate CA container. rename them to **/opt/ca/certs/ca.cert.pem** and **/opt/ca/certs/ca-chain.cert.pem**
 
 That's all, you are now ready to offline the root CA (stop the container and move the /opt/ca/root volume somewhere safe), and begin signing certificates with your subordinate CA.
+
+One-time usage
+--------------
+
+If you just want to generate a Root CA certificate, create an empty folder to be mounted under /opt/ca and run:
+
+```
+docker run --rm -it -v <my/root/ca/folder>:/opt/ca /root/scripts/self_signed.sh
+```
+
+To sign a subordinate certificate with the generated Root CA cert, move the subordinate CSR to the csr follder inside your root CA's volume, and run:
+
+```
+docker run --rm -it -v <my/root/ca/folder>:/opt/ca \
+    /root/scripts/sign_subordinate.sh subordinate_alias \
+    /opt/ca/csr/subordinate.csr.pem
+```
+
+Be aware that several fields in the Root CA and Subordinate CA certificates must match, in order to be able to sign the subordinate certificate:
+
+  - Country
+  - State
+  - Location
+  - Organization
+  - OU

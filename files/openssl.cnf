@@ -37,10 +37,10 @@ policy            = policy_loose
 [ policy_strict ]
 # The root CA should only sign intermediate certificates that match.
 # See the POLICY FORMAT section of `man ca`.
-countryName             = match
-stateOrProvinceName     = match
-organizationName        = match
-organizationalUnitName  = optional
+countryName             = supplied
+stateOrProvinceName     = supplied
+organizationName        = supplied
+organizationalUnitName  = supplied
 commonName              = supplied
 emailAddress            = optional
 
@@ -79,7 +79,7 @@ emailAddress                    = Email Address
 
 # Optionally, specify some defaults.
 countryName_default             = ES
-stateOrProvinceName_default     = Spain
+stateOrProvinceName_default     = Madrid
 localityName_default            = Madrid
 0.organizationName_default      = PKI
 organizationalUnitName_default  =
